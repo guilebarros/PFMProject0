@@ -130,7 +130,7 @@ void PFMProject0AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, 
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
 
-    juce::Random r;
+
     
     for (int i = 0; i < buffer.getNumSamples(); i++)
     {

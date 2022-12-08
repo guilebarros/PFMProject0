@@ -31,3 +31,15 @@ void PFMProject0AudioProcessorEditor::resized()
     // This is generally where you'll want to lay out the positions of any
     // subcomponents in your editor..
 }
+
+void PFMProject0AudioProcessorEditor::mouseDown(const juce::MouseEvent& e)
+{
+    //DBG ("mouse down");
+    audioProcessor.shouldPlaySound = true;
+    
+}
+void PFMProject0AudioProcessorEditor::mouseUp(const juce::MouseEvent& e)
+{
+    audioProcessor.shouldPlaySound = false;
+    //DBG ("mouse up");
+}
