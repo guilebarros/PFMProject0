@@ -47,9 +47,12 @@ public:
     void setStateInformation (const void* data, int sizeInBytes) override;
     
     juce::AudioParameterBool* shouldPlaySound = nullptr;
+    juce::AudioParameterFloat* bgColor = nullptr;
+    
     static void updateAutomatableParameter(juce::RangedAudioParameter*, float value);
 
 private:
+    juce::AudioProcessorValueTreeState apvts;
     juce::Random r;
     
     

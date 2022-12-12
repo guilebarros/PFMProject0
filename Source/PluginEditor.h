@@ -5,7 +5,7 @@
 
 struct PFMProject0AudioProcessor;
 
-class PFMProject0AudioProcessorEditor  : public juce::AudioProcessorEditor
+class PFMProject0AudioProcessorEditor  : public juce::AudioProcessorEditor, public juce::Timer
 {
 public:
     PFMProject0AudioProcessorEditor (PFMProject0AudioProcessor&);
@@ -17,11 +17,16 @@ public:
     
     void mouseDown(const juce::MouseEvent& e) override;
     void mouseUp(const juce::MouseEvent& e) override;
+    void mouseDrag(const juce::MouseEvent& e) override;
+    
+    void timerCallback() override;
 
 private:
-    // This reference is provided as a quick way for your editor to
-    // access the processor object that created it.
+    void update();
+    juce::Point<int> lastClickPos;
+
     PFMProject0AudioProcessor& audioProcessor;
+    float cashedBgColor = 0.f;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PFMProject0AudioProcessorEditor)
 };

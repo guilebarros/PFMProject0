@@ -6,9 +6,11 @@
 PFMProject0AudioProcessorEditor::PFMProject0AudioProcessorEditor (PFMProject0AudioProcessor& p)
     : AudioProcessorEditor (&p), audioProcessor (p)
 {
-    // Make sure that before the constructor has finished, you've set the
-    // editor's size to whatever you need it to be.
+    cashedBgColor = audioProcessor.bgColor->get();
+
     setSize (400, 300);
+    
+    startTimerHz(20);
 }
 
 PFMProject0AudioProcessorEditor::~PFMProject0AudioProcessorEditor()
@@ -16,11 +18,21 @@ PFMProject0AudioProcessorEditor::~PFMProject0AudioProcessorEditor()
     PFMProject0AudioProcessor::updateAutomatableParameter(audioProcessor.shouldPlaySound, false);
 }
 
+void PFMProject0AudioProcessorEditor::timerCallback()
+{
+    update();
+}
+
+void PFMProject0AudioProcessorEditor::update()
+{
+    cashedBgColor = audioProcessor.bgColor->get();
+    repaint();
+}
 //==============================================================================
 void PFMProject0AudioProcessorEditor::paint (juce::Graphics& g)
 {
     // (Our component is opaque, so we must completely fill the background with a solid colour)
-    g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));
+    g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId).interpolatedWith(juce::Colours::red, cashedBgColor));
 
     g.setColour (juce::Colours::white);
     g.setFont (15.0f);
@@ -35,11 +47,22 @@ void PFMProject0AudioProcessorEditor::resized()
 
 void PFMProject0AudioProcessorEditor::mouseDown(const juce::MouseEvent& e)
 {
-    //DBG ("mouse down");
-//    audioProcessor.shouldPlaySound = true;
-    
+    lastClickPos = e.getPosition();
 }
+
 void PFMProject0AudioProcessorEditor::mouseUp(const juce::MouseEvent& e)
 {
     PFMProject0AudioProcessor::updateAutomatableParameter(audioProcessor.shouldPlaySound, !audioProcessor.shouldPlaySound->get());
+}
+
+void PFMProject0AudioProcessorEditor::mouseDrag(const juce::MouseEvent& e)
+{
+    auto clickPos = e.getPosition();
+    
+    auto difY = juce::jlimit(-1.0, 1.0, (clickPos.y - lastClickPos.y) / 200.0);
+    difY = juce::jmap(difY, -1.0, 1.0, 0.0, 1.0);
+    
+    PFMProject0AudioProcessor::updateAutomatableParameter(audioProcessor.bgColor, difY);
+    update();
+
 }

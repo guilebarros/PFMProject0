@@ -11,11 +11,25 @@ PFMProject0AudioProcessor::PFMProject0AudioProcessor()
                       #endif
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
                      #endif
-                       )
+                       ),
 #endif
+apvts(*this, nullptr)
 {
-    shouldPlaySound = new juce::AudioParameterBool("ShouldPlaySoundParam", "ShouldPlaySound", false);
-    addParameter(shouldPlaySound);
+
+    auto shouldPlaySoundParam = std::make_unique<juce::AudioParameterBool>("ShouldPlaySoundParam", "ShouldPlaySound", false);
+    
+    auto* param = apvts.createAndAddParameter(std::move(shouldPlaySoundParam));
+    
+    shouldPlaySound = dynamic_cast<juce::AudioParameterBool*> ( param );
+    
+    auto bgColorParam = std::make_unique<juce::AudioParameterFloat>("Background color", "background color", 0.f, 1.f, 0.5f);
+    
+    param = apvts.createAndAddParameter(std::move(bgColorParam));
+    
+    bgColor = dynamic_cast<juce::AudioParameterFloat*>(param);
+    
+    apvts.state = juce::ValueTree("PFMSynthValueTree");
+    
 }
 
 PFMProject0AudioProcessor::~PFMProject0AudioProcessor()
@@ -164,15 +178,17 @@ juce::AudioProcessorEditor* PFMProject0AudioProcessor::createEditor()
 //==============================================================================
 void PFMProject0AudioProcessor::getStateInformation (juce::MemoryBlock& destData)
 {
-    // You should use this method to store your parameters in the memory block.
-    // You could do that either as raw data, or use the XML or ValueTree classes
-    // as intermediaries to make it easy to save and load complex data.
+    juce::MemoryOutputStream mos(destData, false);
+    apvts.state.writeToStream(mos);
 }
 
 void PFMProject0AudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
-    // You should use this method to restore your parameters from this memory block,
-    // whose contents will have been created by the getStateInformation() call.
+    juce::ValueTree tree = juce::ValueTree::readFromData(data, sizeInBytes);
+    if( tree.isValid() )
+    {
+        apvts.state = tree;
+    }
 }
 
 void PFMProject0AudioProcessor::updateAutomatableParameter(juce::RangedAudioParameter* param, float value)
