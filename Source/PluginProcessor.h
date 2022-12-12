@@ -46,7 +46,8 @@ public:
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
     
-    bool shouldPlaySound = false;
+    juce::AudioParameterBool* shouldPlaySound = nullptr;
+    static void updateAutomatableParameter(juce::RangedAudioParameter*, float value);
 
 private:
     juce::Random r;

@@ -2,7 +2,8 @@
 
 <JUCERPROJECT id="JnVozs" name="PFMProject0" projectType="audioplug" useAppConfig="0"
               addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1" companyName="Guilherme Barros"
-              companyWebsite="instagram/guilebarros">
+              companyWebsite="instagram/guilebarros" pluginCharacteristicsValue="pluginIsSynth,pluginWantsMidiIn"
+              pluginAUMainType="'aumu'">
   <MAINGROUP id="sCcSIj" name="PFMProject0">
     <GROUP id="{9DCC758D-5A1D-CC95-3F76-6FF5BA9A3B55}" name="Source">
       <FILE id="p914hm" name="PluginProcessor.cpp" compile="1" resource="0"

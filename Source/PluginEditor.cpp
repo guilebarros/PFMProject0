@@ -13,6 +13,7 @@ PFMProject0AudioProcessorEditor::PFMProject0AudioProcessorEditor (PFMProject0Aud
 
 PFMProject0AudioProcessorEditor::~PFMProject0AudioProcessorEditor()
 {
+    PFMProject0AudioProcessor::updateAutomatableParameter(audioProcessor.shouldPlaySound, false);
 }
 
 //==============================================================================
@@ -40,12 +41,5 @@ void PFMProject0AudioProcessorEditor::mouseDown(const juce::MouseEvent& e)
 }
 void PFMProject0AudioProcessorEditor::mouseUp(const juce::MouseEvent& e)
 {
-    if (audioProcessor.shouldPlaySound)
-    {
-        audioProcessor.shouldPlaySound = false;
-    }
-    else
-    {
-        audioProcessor.shouldPlaySound = true;
-    }
+    PFMProject0AudioProcessor::updateAutomatableParameter(audioProcessor.shouldPlaySound, !audioProcessor.shouldPlaySound->get());
 }

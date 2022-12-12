@@ -1,11 +1,10 @@
 #pragma once
 
 #include <JuceHeader.h>
-#include "PluginProcessor.h"
+//#include "PluginProcessor.h"
 
-//==============================================================================
-/**
-*/
+struct PFMProject0AudioProcessor;
+
 class PFMProject0AudioProcessorEditor  : public juce::AudioProcessorEditor
 {
 public:

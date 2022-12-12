@@ -14,10 +14,13 @@ PFMProject0AudioProcessor::PFMProject0AudioProcessor()
                        )
 #endif
 {
+    shouldPlaySound = new juce::AudioParameterBool("ShouldPlaySoundParam", "ShouldPlaySound", false);
+    addParameter(shouldPlaySound);
 }
 
 PFMProject0AudioProcessor::~PFMProject0AudioProcessor()
 {
+    
 }
 
 //==============================================================================
@@ -136,7 +139,7 @@ void PFMProject0AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, 
     {
         for (int channel = 0; channel < buffer.getNumChannels(); channel++)
         {
-            if ( shouldPlaySound )
+            if ( shouldPlaySound->get() )
             {
                 buffer.setSample(channel, i, r.nextFloat());
             } else
@@ -172,8 +175,14 @@ void PFMProject0AudioProcessor::setStateInformation (const void* data, int sizeI
     // whose contents will have been created by the getStateInformation() call.
 }
 
-//==============================================================================
-// This creates new instances of the plugin..
+void PFMProject0AudioProcessor::updateAutomatableParameter(juce::RangedAudioParameter* param, float value)
+{
+    // grava os gestos na automacao da DAW, feitas pelo mouse do usuario
+    param->beginChangeGesture();
+    param->setValueNotifyingHost(value);
+    param->endChangeGesture();
+}
+
 juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
     return new PFMProject0AudioProcessor();
